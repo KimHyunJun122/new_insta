@@ -97,53 +97,94 @@
 
     </div>
     <!-- 왼쪽 컬럼-->
-    <div class="col-md-7">
-        <!-- 작성 된 글이 나오는 곳 -->
-        <div class="row">
-            {% for tw in tweet %}
-            <div class="col-md-12 mb-2">
-                <div class="card">
-                    <div class="card-body">
-                        {% if tw.author == user %}
-                        <div style="text-align: right">
-                            <a href="/tweet/delete/{{ tw.id }}">
-                                <span class="badge rounded-pill bg-danger">삭제</span>
-                            </a>
-                        </div>
-                        {% endif %}
-                        <div style="text-align: right">
-                            <a href="/tweet/{{ tw.id }}">
-                                <span class="badge rounded-pill bg-success">보기</span>
-                            </a>
-                        </div>
-
-                        <div class="media">
-                            <div class="media-body">
-                                <h5 class="mt-0">{{ tw.content }}</h5>
-                                {% if tw.tags.all %}
-                                {% for tag in tw.tags.all %}
-                                <a style="text-decoration: none" href="{% url 'tagged_object_list' tag.name %}">
-                                    <span class="badge rounded-pill bg-success">
-                                        {{ tag.name }}
-                                    </span>
-                                </a>
-                                {% endfor %}
-                                -<a style="text-decoration: none" href="{% url 'tag_cloud' %}">TagCloud</a>
-                                {% endif %}
-                            </div>
-                            <div style="text-align: right">
-                                <span style="font-size: small">{{ tw.author.username }}-{{ tw.created_at|timesince}}
-                                    전</span>
-                            </div>
-
-                        </div>
-                    </div>
+    <!-- 작성 된 글이 나오는 곳 -->
+    <div class="left_body">
+        {% for tw in tweet %}
+        <div class="border feed_box">
+            <a href="/tweet/{{ tw.id }}">
+                <img class="feed_img "
+                    src="https://mblogthumb-phinf.pstatic.net/MjAxNzA2MTFfMjc1/MDAxNDk3MTcyMDgyNzEw.ID5RyHWKvsVEW2NS9EQGyRYX7vUaXr7znQeuTrRRmdIg.gK7MD7VhNJPkV4_dueiWer2y-oH7NAAmEklF-6bbYyQg.JPEG.jejubyeol/%EC%97%AC%EB%A6%84%EC%97%90_%EC%A0%9C%EC%A3%BC%EB%8F%84_%EC%82%AC%EC%A7%84%EC%B0%8D%EA%B8%B0_%EC%A2%8B%EC%9D%80%EA%B3%B3.jpg?type=w800">
+            </a>
+            <div class="feed_icon">
+                <div>
+                    <span class="material-icons-outlined">
+                        favorite_border
+                    </span>
+                    <span class="material-icons-outlined">
+                        mode_comment
+                    </span>
+                    <span class="material-icons-outlined">
+                        send
+                    </span>
+                </div>
+                <div>
+                    <span class="material-icons-outlined">
+                        turned_in_not
+                    </span>
                 </div>
             </div>
-            {% endfor %}
+            <div class="feed_like">
+                <p class="feed_txt"> <b>좋아요 10개</b></p>
+            </div>
+            <div class="feed_content">
+                <p class="feed_txt"> <b> {{ user.username }} </b> {{ tw.content }}
+                <div style="text-align: right">
+                    <span style="font-size: small">{{ tw.author.username }}-{{ tw.created_at|timesince}} 전</span>
+                </div>
+                </p>
+                {% if tw.tags.all %}
+                {% for tag in tw.tags.all %}
+                <a style="text-decoration: none" href="{% url 'tagged_object_list' tag.name %}">
+                    <span class="badge rounded-pill bg-success">
+                        {{ tag.name }}
+                    </span>
+                </a>
+                {% endfor %}
+                -<a style="text-decoration: none" href="{% url 'tag_cloud' %}">TagCloud</a>
+                {% endif %}
+                <div class="mb-2" style="display: flex; align-items: center; justify-content: space-between">
+                    <hr style="border:1px silver; width: 450px">
+                </div>
+            </div>
+            <div class="feed_reply">
+                <div class="feed_reply">
+                    <!-- {% for cm in comment %} -->
+                    <span class="feed_txt"> <b> {{ cm.author }} </b> {{ cm.comment }}</span>
+                    <!-- {% endfor %} -->
+                </div>
+            </div>
         </div>
+        {% endfor %}
     </div>
 </div>
 
+<!-- 
+{% for cm in comment %}
+<div class="row">
+    <div class="col-md-12">
+        <div class="media">
+            <div class="media-body">
+                <div style="display: flex; align-items: center; ">
+                    <div class="detail_profile_box">
+                        <img class="detail_profile_img"
+                            src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQHPNYM5RQgA2F7BtpBQ-OrNFKDXVDUpypRuw&usqp=CAU">
+                    </div>
+                    <h5 class="detail_feed_name_txt">{{ cm.author }}</h5>
+                    <h5 class="comment_txt">{{ cm.comment }}</h5>
+                </div>
+                <span class="detail_feed_txt"> - {{ cm.created_at | timesince }}</span>
+                {% if cm.author == user %}
+                <div style="float: right">
+                    <a href="/tweet/comment/delete/{{ cm.id }}">
+                        <span class="badge bg-danger">삭제</span>
+                    </a>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+<hr>
+{% endfor %} -->
 
 {% endblock %}
